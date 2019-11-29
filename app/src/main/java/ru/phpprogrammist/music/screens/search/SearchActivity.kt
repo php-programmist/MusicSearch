@@ -3,13 +3,16 @@ package ru.phpprogrammist.music.screens.search
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import ru.phpprogrammist.music.R
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.*
+import ru.phpprogrammist.music.adapters.ArtistsAdapter
 
 import kotlin.coroutines.CoroutineContext
 
@@ -44,8 +47,11 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Coro
 
     private fun performSearch(query: String){
         Log.i("music",query)
-        viewModel.searchArtists(query).observe(this, Observer {
-            Log.i("music",it.results[1].toString())
+        viewModel.searchArtists(query).observe(this, Observer { artistsResponse ->
+            artistsList.layoutManager = LinearLayoutManager(this)
+            artistsList.adapter = ArtistsAdapter(artistsResponse.results) {
+                Toast.makeText(this,"${it.artistName} Clicked",Toast.LENGTH_SHORT).show()
+            }
         })
     }
 }
