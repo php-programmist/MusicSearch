@@ -36,7 +36,7 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Coro
         val searchText = newText.trim()
         queryTextChangedJob?.cancel()
         queryTextChangedJob = launch(Dispatchers.Main) {
-            delay(1000)
+            delay(500)
             if (searchText.length > 2 || searchText.isEmpty()){
                 performSearch(searchText)
             }
