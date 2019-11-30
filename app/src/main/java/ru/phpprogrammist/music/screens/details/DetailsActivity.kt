@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_details.*
 import ru.phpprogrammist.music.R
 import ru.phpprogrammist.music.adapters.AlbumsPagedListAdapter
+import ru.phpprogrammist.music.adapters.SongsPagedListAdapter
 
 
 class DetailsActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class DetailsActivity : AppCompatActivity() {
         actionBar?.title = artistName
         viewModel.setId(artistId)
         initAlbumsList()
+        initSongsList()
     }
     override fun onSupportNavigateUp(): Boolean {
         finish()
@@ -35,6 +37,15 @@ class DetailsActivity : AppCompatActivity() {
         albumsList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
         albumsList.adapter = adapter
         viewModel.allAlbums.observe(this, Observer { pagedList ->
+            adapter.submitList(pagedList)
+        })
+    }
+
+    private fun initSongsList() {
+        val adapter = SongsPagedListAdapter()
+        songsList.layoutManager = LinearLayoutManager(this)
+        songsList.adapter = adapter
+        viewModel.allSongs.observe(this, Observer { pagedList ->
             adapter.submitList(pagedList)
         })
     }
