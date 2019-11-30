@@ -1,10 +1,10 @@
 package ru.phpprogrammist.music.screens.search
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +12,7 @@ import ru.phpprogrammist.music.R
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.*
 import ru.phpprogrammist.music.adapters.ArtistsPagedListAdapter
+import ru.phpprogrammist.music.screens.details.DetailsActivity
 
 import kotlin.coroutines.CoroutineContext
 
@@ -24,9 +25,11 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Coro
         setContentView(R.layout.activity_search)
 
         artistSearch.setOnQueryTextListener(this)
+        performSearch("Lana de")
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
+        performSearch(query?:"")
         return false
     }
 
@@ -51,7 +54,10 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Coro
 
     private fun initList() {
         val adapter = ArtistsPagedListAdapter {
-            Toast.makeText(this, "${it?.artistName} Clicked", Toast.LENGTH_SHORT).show()
+            intent = Intent(this,DetailsActivity::class.java)
+            intent.putExtra("artistName",it?.artistName)
+            intent.putExtra("artistId",it?.artistId)
+            startActivity(intent)
         }
         artistsList.layoutManager = LinearLayoutManager(this)
         artistsList.adapter = adapter

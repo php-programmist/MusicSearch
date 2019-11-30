@@ -5,13 +5,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import ru.phpprogrammist.music.data.artists.Result
+import ru.phpprogrammist.music.data.artists.Artist
 import java.util.concurrent.Executors
 
 class SearchViewModel(application: Application) : AndroidViewModel(application){
-    private var artistsLiveData: LiveData<PagedList<Result>>? = null
+    private var artistsLiveData: LiveData<PagedList<Artist>>? = null
     private val artistsSourceFactory = ArtistsSourceFactory()
-    val allArtists: LiveData<PagedList<Result>>
+    val allArtists: LiveData<PagedList<Artist>>
         get() {
             if (null == artistsLiveData) {
                 val config = PagedList.Config.Builder()
@@ -21,7 +21,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application){
                     .setEnablePlaceholders(PAGED_LIST_ENABLE_PLACEHOLDERS)
                     .build()
 
-                val builder = LivePagedListBuilder<Int,Result>(artistsSourceFactory,config)
+                val builder = LivePagedListBuilder<Int,Artist>(artistsSourceFactory,config)
                 artistsLiveData = builder.setFetchExecutor(Executors.newSingleThreadExecutor())
                     .build()
 

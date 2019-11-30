@@ -20,7 +20,7 @@ interface ApiService {
 
     @GET("lookup")
     fun getAlbums(
-        @Query("amgArtistId") amgArtistId: Int,
+        @Query("id") artistId: Int,
         @Query("entity") entity: String,
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
@@ -28,7 +28,7 @@ interface ApiService {
 
     @GET("lookup")
     fun getSongs(
-        @Query("amgArtistId") amgArtistId: Int,
+        @Query("id") artistId: Int,
         @Query("entity") entity: String,
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
