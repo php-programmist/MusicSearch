@@ -2,13 +2,40 @@ package ru.phpprogrammist.music.screens.search
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import ru.phpprogrammist.music.api.ItunesRepositoryProvider
-import ru.phpprogrammist.music.data.artists.ArtistsResponse
+import androidx.lifecycle.LiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import ru.phpprogrammist.music.data.artists.Result
+import java.util.concurrent.Executors
 
 class SearchViewModel(application: Application) : AndroidViewModel(application){
-    fun searchArtists(query: String, limit: Long = 50, offset: Long = 0): MutableLiveData<ArtistsResponse> {
-        val repository = ItunesRepositoryProvider.provideItunesRepository()
-        return repository.searchArtists(query,limit,offset)
+    private var artistsLiveData: LiveData<PagedList<Result>>? = null
+    private val artistsSourceFactory = ArtistsSourceFactory()
+    val allArtists: LiveData<PagedList<Result>>
+        get() {
+            if (null == artistsLiveData) {
+                val config = PagedList.Config.Builder()
+                    .setPageSize(PAGED_LIST_PAGE_SIZE)
+                    .setInitialLoadSizeHint(PAGED_LIST_PAGE_SIZE)
+                    .setPrefetchDistance(PREFETCH_DISTANCE)
+                    .setEnablePlaceholders(PAGED_LIST_ENABLE_PLACEHOLDERS)
+                    .build()
+
+                val builder = LivePagedListBuilder<Int,Result>(artistsSourceFactory,config)
+                artistsLiveData = builder.setFetchExecutor(Executors.newSingleThreadExecutor())
+                    .build()
+
+            }
+            return artistsLiveData ?: throw AssertionError("Check your threads ...")
+        }
+
+    fun setQuery(query: String){
+        artistsSourceFactory.query = query
+        artistsLiveData = null // invalidate
+    }
+    companion object {
+        private const val PAGED_LIST_PAGE_SIZE = 50
+        private const val PREFETCH_DISTANCE = 10
+        private const val PAGED_LIST_ENABLE_PLACEHOLDERS = false
     }
 }

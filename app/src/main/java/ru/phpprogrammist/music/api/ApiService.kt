@@ -14,24 +14,24 @@ interface ApiService {
     fun searchArtists(
         @Query("term") query: String,
         @Query("entity") entity: String,
-        @Query("limit") limit: Long,
-        @Query("offset") offset: Long
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): Call<ArtistsResponse>
 
     @GET("lookup")
     fun getAlbums(
-        @Query("amgArtistId") amgArtistId: Long,
+        @Query("amgArtistId") amgArtistId: Int,
         @Query("entity") entity: String,
-        @Query("limit") limit: Long,
-        @Query("offset") offset: Long
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): Call<AlbumsResponse>
 
     @GET("lookup")
     fun getSongs(
-        @Query("amgArtistId") amgArtistId: Long,
+        @Query("amgArtistId") amgArtistId: Int,
         @Query("entity") entity: String,
-        @Query("limit") limit: Long,
-        @Query("offset") offset: Long
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): Call<SongsResponse>
 
     companion object Factory {

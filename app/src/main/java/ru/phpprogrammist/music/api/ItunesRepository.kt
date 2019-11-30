@@ -11,31 +11,12 @@ import ru.phpprogrammist.music.data.songs.SongsResponse
 
 class ItunesRepository(private val apiService: ApiService) {
 
-    fun searchArtists(query: String, limit: Long, offset: Long): MutableLiveData<ArtistsResponse> {
-        val liveData: MutableLiveData<ArtistsResponse> = MutableLiveData()
+    fun searchArtists(query: String, limit: Int, offset: Int): ArtistsResponse {
         val entity = "musicArtist"
-        apiService.searchArtists(query, entity, limit, offset)
-            .enqueue(object : Callback<ArtistsResponse> {
-                override fun onResponse(
-                    call: Call<ArtistsResponse>,
-                    response: Response<ArtistsResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        liveData.value = response.body()
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<ArtistsResponse>,
-                    t: Throwable
-                ) {
-                    Log.e("music", "Error during ItunesRepository:searchArtists: {${t.message}}")
-                }
-            })
-        return liveData
+        return apiService.searchArtists(query, entity, limit, offset).execute().body()?:ArtistsResponse()
     }
 
-    fun getAlbums(amgArtistId: Long, limit: Long, offset: Long): MutableLiveData<AlbumsResponse> {
+    fun getAlbums(amgArtistId: Int, limit: Int, offset: Int): MutableLiveData<AlbumsResponse> {
         val liveData: MutableLiveData<AlbumsResponse> = MutableLiveData()
         val entity = "album"
         apiService.getAlbums(amgArtistId, entity, limit, offset)
@@ -53,13 +34,13 @@ class ItunesRepository(private val apiService: ApiService) {
                     call: Call<AlbumsResponse>,
                     t: Throwable
                 ) {
-                    Log.e("music", "Error during ItunesRepository:getAlbums: {${t.message}}")
+                    Log.e("music_tag", "Error during ItunesRepository:getAlbums: {${t.message}}")
                 }
             })
         return liveData
     }
 
-    fun getSongs(amgArtistId: Long, limit: Long, offset: Long): MutableLiveData<SongsResponse> {
+    fun getSongs(amgArtistId: Int, limit: Int, offset: Int): MutableLiveData<SongsResponse> {
         val liveData: MutableLiveData<SongsResponse> = MutableLiveData()
         val entity = "song"
         apiService.getSongs(amgArtistId, entity, limit, offset)
@@ -77,7 +58,7 @@ class ItunesRepository(private val apiService: ApiService) {
                     call: Call<SongsResponse>,
                     t: Throwable
                 ) {
-                    Log.e("music", "Error during ItunesRepository:getSongs: {${t.message}}")
+                    Log.e("music_tag", "Error during ItunesRepository:getSongs: {${t.message}}")
                 }
             })
         return liveData
