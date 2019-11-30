@@ -25,7 +25,6 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Coro
         setContentView(R.layout.activity_search)
 
         artistSearch.setOnQueryTextListener(this)
-        performSearch("Lana de")
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -47,7 +46,6 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Coro
     }
 
     private fun performSearch(query: String){
-        Log.i("music_tag",query)
         viewModel.setQuery(query)
         initList()
     }
