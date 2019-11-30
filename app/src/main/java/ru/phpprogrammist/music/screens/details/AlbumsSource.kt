@@ -1,6 +1,5 @@
 package ru.phpprogrammist.music.screens.details
 
-import android.util.Log
 import androidx.paging.PositionalDataSource
 import ru.phpprogrammist.music.api.ItunesRepositoryProvider
 import ru.phpprogrammist.music.data.albums.Album
@@ -14,7 +13,9 @@ class AlbumsSource(val artistId: Int) : PositionalDataSource<Album>() {
     }
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Album>) {
-        val response = dataProvider.getAlbums(artistId, params.loadSize, params.startPosition)
-        callback.onResult(response.results.drop(1))
+        //val response = dataProvider.getAlbums(artistId, params.loadSize, params.startPosition)
+        //callback.onResult(response.results.drop(1))
+        /*К сожалению, API не поддерживает параметр offset. Поэтому возвращаем пустой список, чтобы сигнализировать о конце списка*/
+        callback.onResult(listOf())
     }
 }
